@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pi Aid - Bağış Platformu</title>
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #6c757d;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --background-color: #f8f9fa;
+            --card-background: #ffffff;
+            --text-color: #343a40;
+            --pi-color: #007bff; /* Pi Network'ün mavi rengi */
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--background-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: var(--card-background);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .logo-pi {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--pi-color);
+            margin-bottom: 5px;
+        }
+
+        .app-title {
+            font-size: 1.8rem;
+            color: var(--text-color);
+            margin-top: 0;
+            font-weight: 600;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 5px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+        }
+
+        .card {
+            background: var(--background-color);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .card-text {
+            font-weight: bold;
+        }
+
+        .campaign-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--background-color);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .campaign-title {
+            font-weight: bold;
+        }
+
+        .button {
+            padding: 10px 15px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: #fff;
+            text-align: center;
+            transition: background-color 0.2s;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .donation-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .donation-btn {
+            background-color: #e9ecef;
+            color: var(--text-color);
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            border: 2px solid #e9ecef;
+            transition: all 0.2s;
+        }
+
+        .donation-btn:hover {
+            background-color: #dee2e6;
+        }
+
+        .donation-btn.active {
+            background-color: var(--pi-color);
+            color: #fff;
+            border-color: var(--pi-color);
+        }
+
+        .thanks-message {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .thanks-icon {
+            font-size: 3rem;
+            color: var(--success-color);
+            margin-bottom: 10px;
+        }
+
+        .thanks-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--success-color);
+        }
+
+        .badge {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: linear-gradient(45deg, #cd7f32, #d4af37, #e6d3a3);
+            color: #fff;
+            font-weight: bold;
+            border-radius: 20px;
+            display: inline-block;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            font-size: 1.1rem;
+        }
+        
+        /* Sayfa geçişlerini yönetmek için CSS */
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="home-page" class="page active">
+        <div class="header">
+            <div class="logo-pi">π Aid</div>
+            <h1 class="app-title">Bağış Platformu</h1>
+        </div>
+        <h2 class="section-title">Kategoriler</h2>
+        <div class="grid">
+            <div class="card" onclick="showCampaigns('Evsizler')">
+                <div class="card-icon">🏠</div>
+                <div class="card-text">Evsizler</div>
+            </div>
+            <div class="card" onclick="showCampaigns('Afet Yardımları')">
+                <div class="card-icon">🌪️</div>
+                <div class="card-text">Afet Yardımları</div>
+            </div>
+            <div class="card" onclick="showCampaigns('Orman Yangını')">
+                <div class="card-icon">🌲🔥</div>
+                <div class="card-text">Orman Yangını</div>
+            </div>
+            <div class="card" onclick="showCampaigns('Hayvanlar')">
+                <div class="card-icon">🐶🐱</div>
+                <div class="card-text">Hayvanlar</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="campaign-page" class="page">
+        <div class="header">
+            <div class="logo-pi">π Aid</div>
+            <h1 class="app-title" id="campaign-category-title"></h1>
+        </div>
+        <div id="campaign-list">
+            </div>
+        <div style="margin-top: 20px;">
+            <button class="button btn-primary" onclick="goHome()">Ana Sayfaya Dön</button>
+        </div>
+    </div>
+
+    <div id="donate-page" class="page">
+        <div class="header">
+            <div class="logo-pi">π Aid</div>
+            <h1 class="app-title" id="donate-campaign-title"></h1>
+        </div>
+        
+        <p>Lütfen bağış miktarını seçin:</p>
+        <div class="donation-options">
+            <div class="donation-btn" data-amount="5">5 Pi</div>
+            <div class="donation-btn" data-amount="10">10 Pi</div>
+            <div class="donation-btn" data-amount="20">20 Pi</div>
+            <div class="donation-btn" data-amount="50">50 Pi</div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 20px;">
+            <button id="donate-button" class="button btn-primary" disabled>Bağış Yap</button>
+        </div>
+        
+        <div style="margin-top: 20px;">
+            <button class="button btn-primary" onclick="goBackToCampaigns()">Geri Dön</button>
+        </div>
+    </div>
+
+    <div id="thanks-page" class="page">
+        <div class="thanks-message">
+            <div class="thanks-icon">🎉</div>
+            <p class="thanks-text">Teşekkürler!</p>
+            <p id="donation-amount-text"></p>
+            <div class="badge">Bronz Bağışçı Rozeti</div>
+        </div>
+        <div style="text-align: center; margin-top: 30px;">
+            <button class="button btn-primary" onclick="goHome()">Ana Sayfaya Dön</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const pages = {
+        'home': document.getElementById('home-page'),
+        'campaign': document.getElementById('campaign-page'),
+        'donate': document.getElementById('donate-page'),
+        'thanks': document.getElementById('thanks-page')
+    };
+    
+    const campaignsData = {
+        'Evsizler': [
+            { title: 'Sokaktaki Dostlarımız için Sıcak Yemek', target: 500 },
+            { title: 'Barınma Evleri Projesi', target: 1000 }
+        ],
+        'Afet Yardımları': [
+            { title: 'Depremzedeler için Acil Fon', target: 500 },
+            { title: 'Sel Mağdurları için Destek', target: 750 }
+        ],
+        'Orman Yangını': [
+            { title: 'Fidan Dikim Seferberliği', target: 200 },
+            { title: 'Yangın Söndürme Ekipmanları', target: 800 }
+        ],
+        'Hayvanlar': [
+            { title: 'Sokak Hayvanları için Mama', target: 300 },
+            { title: 'Rehabilitasyon Merkezleri', target: 600 }
+        ]
+    };
+    
+    let selectedCampaign;
+    let selectedAmount;
+
+    function showPage(pageId) {
+        for (const key in pages) {
+            pages[key].classList.remove('active');
+        }
+        pages[pageId].classList.add('active');
+    }
+
+    function goHome() {
+        showPage('home');
+    }
+    
+    function goBackToCampaigns() {
+        showCampaigns(selectedCampaign.category);
+    }
+
+    function showCampaigns(category) {
+        document.getElementById('campaign-category-title').textContent = category;
+        const campaignList = document.getElementById('campaign-list');
+        campaignList.innerHTML = '';
+
+        campaignsData[category].forEach(campaign => {
+            const campaignItem = document.createElement('div');
+            campaignItem.className = 'campaign-item';
+            campaignItem.innerHTML = `
+                <div>
+                    <div class="campaign-title">${campaign.title}</div>
+                    <small>Hedef: ${campaign.target} Pi</small>
+                </div>
+                <button class="button btn-primary" onclick="showDonationPage('${category}', '${campaign.title}')">Bağış Yap</button>
+            `;
+            campaignList.appendChild(campaignItem);
+        });
+        
+        showPage('campaign');
+    }
+    
+    function showDonationPage(category, title) {
+        selectedCampaign = { category, title };
+        document.getElementById('donate-campaign-title').textContent = title;
+        selectedAmount = null; // Bağış sayfası açılınca seçili miktarı sıfırla
+        document.getElementById('donate-button').disabled = true;
+
+        const donationButtons = document.querySelectorAll('.donation-btn');
+        donationButtons.forEach(btn => {
+            btn.classList.remove('active');
+            btn.onclick = () => selectAmount(btn);
+        });
+
+        showPage('donate');
+    }
+
+    function selectAmount(button) {
+        const donationButtons = document.querySelectorAll('.donation-btn');
+        donationButtons.forEach(btn => btn.classList.remove('active'));
+        
+        button.classList.add('active');
+        selectedAmount = button.getAttribute('data-amount');
+        document.getElementById('donate-button').disabled = false;
+    }
+
+    document.getElementById('donate-button').addEventListener('click', () => {
+        // Burada Pi API simülasyonu yapılacak.
+        // Normalde burada Pi SDK'sı ile ödeme isteği gönderilirdi.
+        
+        setTimeout(() => {
+            document.getElementById('donation-amount-text').textContent = `${selectedAmount} Pi bağış yaptınız 🙏`;
+            showPage('thanks');
+        }, 1000); // 1 saniye sonra teşekkür sayfasını göster (simülasyon)
+    });
+</script>
+
+</body>
+</html>
+
